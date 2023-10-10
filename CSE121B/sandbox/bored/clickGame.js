@@ -17,11 +17,11 @@ function startGame() {
 function circleClicked(event) {
     if (!gameStarted) {
         startGame();
-    } else {
-        score++;
-        document.getElementById('score').textContent = score;
-        moveCircle(event);
     }
+    score++;
+    document.getElementById('score').textContent = score;    
+    moveCircle(event);
+    
 }
 
 function moveCircle(event) {
