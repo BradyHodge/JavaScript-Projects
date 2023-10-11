@@ -41,7 +41,22 @@ function updateTimer() {
     if (timeLeft <= 0) {
         clearInterval(timerInterval);
         gameStarted = false;
-        alert('Game over! Your score is: ' + score);
+        
+        let highScore = localStorage.getItem('highScore');
+    if (highScore === null) {
+        highScore = 0;
+    } else {
+        highScore = parseInt(highScore);
+    }
+
+    
+    if (score > highScore) {
+        
+        localStorage.setItem('highScore', score);
+        alert('New high score! Your score is: ' + score);
+    } else {
+        alert('Game over! Your score is: ' + score + '. High score: ' + highScore);
+    }
     }
 }
 
