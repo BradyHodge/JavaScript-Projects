@@ -1,27 +1,48 @@
-let score = 0;
-let timeLeft = 10;
-let timerInterval;
-let gameStarted = false;
+const gameState = {
+    score: 0,
+    timeLeft: 10,
+    gameStarted: false,
+    timerInterval: null,
+    reset: function() {
+        this.score = 0;
+        this.timeLeft = 10;
+        this.gameStarted = false;
+        this.timerInterval = null;
+    },
+    incrementScore: function() {
+        this.score++;
+    },
+    decrementTime: function() {
+        this.timeLeft--;
+    }
+};
+
+const timer = {
+    start: function(callback, interval) {
+        gameState.timerInterval = setInterval(callback, interval);
+    },
+    stop: function() {
+        clearInterval(gameState.timerInterval);
+    }
+};
 
 function startGame() {
-    if (gameStarted) return;
+    if (gameState.gameStarted) return;
 
-    gameStarted = true;
-    score = 0;
-    timeLeft = 10;
-    document.getElementById('score').textContent = score;
-    document.getElementById('timer').textContent = timeLeft;
-    timerInterval = setInterval(updateTimer, 1000);
+    gameState.reset();
+    gameState.gameStarted = true;
+    document.getElementById('score').textContent = gameState.score;
+    document.getElementById('timer').textContent = gameState.timeLeft;
+    timer.start(updateTimer, 1000);
 }
 
 function circleClicked(event) {
-    if (!gameStarted) {
+    if (!gameState.gameStarted) {
         startGame();
     }
-    score++;
-    document.getElementById('score').textContent = score;    
+    gameState.incrementScore();
+    document.getElementById('score').textContent = gameState.score;
     moveCircle(event);
-    
 }
 
 function moveCircle(event) {
@@ -36,27 +57,25 @@ function moveCircle(event) {
 }
 
 function updateTimer() {
-    timeLeft--;
-    document.getElementById('timer').textContent = timeLeft;
-    if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        gameStarted = false;
-        
-        let highScore = localStorage.getItem('highScore');
-    if (highScore === null) {
-        highScore = 0;
-    } else {
-        highScore = parseInt(highScore);
-    }
+    gameState.decrementTime();
+    document.getElementById('timer').textContent = gameState.timeLeft;
+    if (gameState.timeLeft <= 0) {
+        timer.stop();
+        gameState.gameStarted = false;
 
-    
-    if (score > highScore) {
-        
-        localStorage.setItem('highScore', score);
-        alert('New high score! Your score is: ' + score);
-    } else {
-        alert('Game over! Your score is: ' + score + '. High score: ' + highScore);
-    }
+        let highScore = localStorage.getItem('highScore');
+        if (highScore === null) {
+            highScore = 0;
+        } else {
+            highScore = parseInt(highScore);
+        }
+
+        if (gameState.score > highScore) {
+            localStorage.setItem('highScore', gameState.score);
+            alert('New high score! Your score is: ' + gameState.score);
+        } else {
+            alert('Game over! Your score is: ' + gameState.score + '. High score: ' + highScore);
+        }
     }
 }
 
