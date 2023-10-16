@@ -34,6 +34,10 @@ function startGame() {
     document.getElementById('score').textContent = gameState.score;
     document.getElementById('timer').textContent = gameState.timeLeft;
     timer.start(updateTimer, 1000);
+
+    document.querySelectorAll('.circle').forEach(circle => {
+        moveCircle(circle);
+    });
 }
 
 function circleClicked(event) {
@@ -42,18 +46,14 @@ function circleClicked(event) {
     }
     gameState.incrementScore();
     document.getElementById('score').textContent = gameState.score;
-    moveCircle(event);
+    moveCircle(event.target); 
 }
 
-function moveCircle(event) {
-    if (event) {
-        event.stopPropagation();
-    }
-    const circle = document.querySelector('.circle');
+function moveCircle(circleElement) {
     const x = Math.random() * (400 - 50);
     const y = Math.random() * (400 - 50);
-    circle.style.left = x + 'px';
-    circle.style.top = y + 'px';
+    circleElement.style.left = x + 'px';
+    circleElement.style.top = y + 'px';
 }
 
 function updateTimer() {
@@ -79,4 +79,6 @@ function updateTimer() {
     }
 }
 
-document.querySelector('.circle').addEventListener('click', circleClicked);
+document.querySelectorAll('.circle').forEach(circle => {
+    circle.addEventListener('click', circleClicked);
+});
