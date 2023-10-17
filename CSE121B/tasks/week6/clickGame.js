@@ -27,7 +27,6 @@ const timer = {
 };
 
 function startGame() {
-    if (gameState.gameStarted) return;
 
     gameState.reset();
     gameState.gameStarted = true;
